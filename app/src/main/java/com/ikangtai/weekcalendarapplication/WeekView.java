@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -32,7 +33,11 @@ public class WeekView extends View {
     private int dayColor;
     private int selectedDayColorRes;
     private int selectedDayColor;
-    private ArrayList<String> days = new ArrayList<>();
+    private ArrayList<LocalDate> days = new ArrayList<>();
+
+    private OnDayClickListener onDayClickListener;
+
+    private LocalDate selectedDate;
 
     public WeekView(Context context, TypedArray typedArray) {
         super(context);
@@ -60,33 +65,39 @@ public class WeekView extends View {
         super.onDraw(canvas);
         float dis = width / 14;
         for (int i = 0; i < days.size(); i++) {
-            String day = days.get(i);
-            if (day != null) {
-                canvas.drawText(day, dis * (2 * i + 1), heigh - heigh / 4, txtPaint);
+            LocalDate date = days.get(i);
+            if (date != null){
+                if (selectedDate != null && selectedDate.getDayOfMonth() == date.getDayOfMonth() &&
+                        selectedDate.getMonthOfYear() == date.getMonthOfYear()
+                        && selectedDate.getYear() == date.getYear()){
+                    txtPaint.setColor(selectedDayColor);
+                } else {
+                    txtPaint.setColor(dayColor);
+                }
+                canvas.drawText(String.valueOf(date.getDayOfMonth()), dis * (2 * i + 1), heigh - heigh / 4, txtPaint);
             }
         }
     }
 
-    public void setDayText(LocalDate localDate) {
+    public void setDayText(LocalDate startDate, LocalDate selectedDate) {
+        this.selectedDate = selectedDate;
         days.clear();
         for (int i = 0; i < 7; i++) {
-            int dayOfMonth = localDate.plusDays(i).getDayOfMonth();
-            days.add(String.valueOf(dayOfMonth));
+            days.add(startDate.plusDays(i));
         }
         invalidate();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        Log.i("zsc", event.getAction() + "");
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            float x = event.getX();
-            float v = x / (width / 7);
-
-
-
-            return true;
+            int index = (int) (event.getX() / (width / 7));
+            if (index < days.size() && onDayClickListener != null){
+                onDayClickListener.onClickDay(days.get(index));
+            }
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     private void setWH() {
@@ -104,6 +115,15 @@ public class WeekView extends View {
                 .WeekCalendarView_weekSelectedTextColor, 0);
         selectedDayColor = typedArray.getColor(R.styleable
                 .WeekCalendarView_weekSelectedTextColor, Color.BLUE);
+
+    }
+
+    public interface OnDayClickListener{
+        void onClickDay(LocalDate localDate);
+    }
+
+    public void setOnDayClickListener(OnDayClickListener onDayClickListener){
+        this.onDayClickListener = onDayClickListener;
     }
 
 
