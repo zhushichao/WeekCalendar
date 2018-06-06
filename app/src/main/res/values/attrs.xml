@@ -4,5 +4,6 @@
         <attr name="weekTextSize" format="dimension"/>
         <attr name="weekTextColor" format="reference|color"/>
         <attr name="weekSelectedTextColor" format="reference|color"/>
+        <attr name="weekLabels" format="reference"/>
     </declare-styleable>
 </resources>

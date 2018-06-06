@@ -7,13 +7,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 
 /**
  * @author zsc
  * @date 2018/6/6
  * @Description
  */
-public class WeekCalendarView extends RecyclerView {
+public class WeekCalendarView extends ViewGroup {
+
+
 
     private Context context;
 
@@ -28,15 +31,17 @@ public class WeekCalendarView extends RecyclerView {
 
     }
 
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+    }
+
     private void init(AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WeekCalendarView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context,
-                LinearLayoutManager.HORIZONTAL, false);
-        setLayoutManager(layoutManager);
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(this);
-        WeekPageAdapter pageAdapter = new WeekPageAdapter(typedArray, context);
-        setAdapter(pageAdapter);
+        LabelView labelView = new LabelView(context, typedArray);
+        addView(labelView);
+        WeekPagerView pagerView = new WeekPagerView(context, typedArray);
+        addView(pagerView);
     }
 
 }
