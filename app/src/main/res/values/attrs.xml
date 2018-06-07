@@ -3,6 +3,11 @@
     <declare-styleable name="WeekCalendarView">
         <attr name="weekTextSize" format="dimension"/>
         <attr name="weekTextColor" format="reference|color"/>
+        <attr name="weekHigh" format="dimension"/>
         <attr name="weekSelectedTextColor" format="reference|color"/>
+        <attr name="weekLabels" format="reference"/>
+        <attr name="weekLabelTextSize" format="dimension"/>
+        <attr name="weekLabelTextColor" format="reference|color"/>
+        <attr name="weekLabelHigh" format="dimension"/>
     </declare-styleable>
 </resources>

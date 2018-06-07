@@ -19,16 +19,16 @@ import java.text.SimpleDateFormat;
  */
 public class WeekPageAdapter extends RecyclerView.Adapter<WeekPageAdapter.ItemHolder> implements WeekView.OnDayClickListener {
 
-
+    private OnClickDateListener listener;
     private TypedArray typedArray;
     private Context context;
-    private LocalDate startDate;
+    private LocalDate minDate;
     private LocalDate selectedDate;
+    private int countDays;
 
     public WeekPageAdapter(TypedArray typedArray, Context context) {
         this.typedArray = typedArray;
         this.context = context;
-        startDate = LocalDate.now();
     }
 
     @Override
@@ -39,13 +39,14 @@ public class WeekPageAdapter extends RecyclerView.Adapter<WeekPageAdapter.ItemHo
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-        holder.weekView.setDayText(startDate.plusDays(position * 7), selectedDate);
+        holder.weekView.setDayText(minDate.plusDays(position * 7), selectedDate);
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return countDays;
     }
+
 
 
 
@@ -63,6 +64,30 @@ public class WeekPageAdapter extends RecyclerView.Adapter<WeekPageAdapter.ItemHo
     public void onClickDay(LocalDate localDate) {
         Log.d("zsc", new SimpleDateFormat("yyyy-MM-dd HH:ss").format(localDate.toDate()));
         selectedDate = localDate;
+        if (listener != null){
+            listener.onClickDate(localDate);
+        }
+//        notifyDataSetChanged();
+    }
+
+    public void setOnClickDateListener(OnClickDateListener listener){
+        this.listener = listener;
+    }
+
+    public void setSelectedDate(LocalDate localDate){
+        this.selectedDate = localDate;
         notifyDataSetChanged();
     }
+
+    public void setSelectedDate(int indexDay){
+        this.setSelectedDate(minDate.plusDays(indexDay));
+        notifyDataSetChanged();
+    }
+
+    public void setCount(int days, LocalDate min, LocalDate max) {
+        this.countDays = days;
+        this.minDate = min;
+        notifyDataSetChanged();
+    }
+
 }

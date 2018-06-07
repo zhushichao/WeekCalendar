@@ -4,13 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ikangtai.weekcalendarapplication.MainActivity">
 
     <com.ikangtai.weekcalendarapplication.WeekCalendarView
         app:weekSelectedTextColor="#FF0000"
+        android:id="@+id/week_calendar"
         app:weekTextColor="#000000"
         app:weekTextSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
 </LinearLayout>
